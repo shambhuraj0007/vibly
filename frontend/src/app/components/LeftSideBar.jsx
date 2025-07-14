@@ -21,6 +21,9 @@ const LeftSideBar = () => {
   
     const handleNavigation = (path,item) => {
         router.push(path);
+        if (isSidebarOpen) {
+            toggleSidebar();
+        }
     }
   
 

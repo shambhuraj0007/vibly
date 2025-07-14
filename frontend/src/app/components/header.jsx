@@ -17,6 +17,7 @@ import {
   Video,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import toast from "react-hot-toast";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -26,26 +27,44 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import useSidebarStore from "@/store/sidebarStore";
-import { useRouter } from 'next/navigation';
-
+import { useRouter } from "next/navigation";
+import userStore from "@/store/userStore";
+import { logout } from "@/service/auth.service";// Assuming you have a logout function in your auth service
 
 const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const {theme, setTheme} = useTheme();
-  const {toggleSidebar}= useSidebarStore();
+  const { theme, setTheme } = useTheme();
+  const { toggleSidebar } = useSidebarStore();
   const router = useRouter();
+  const { user, clearUser } = userStore();
 
-  const handleNavigation = (path,item) => {
-      router.push(path);
-  }
-
+  const handleNavigation = (path, item) => {
+    router.push(path);
+  };
+  const handleLogout = async () => {
+    try {
+      const result = await logout();
+      if (result?.status == "success") {
+        router.push("/user-login");
+        clearUser();
+      }
+      toast.success("user logged out successfully");
+    } catch (error) {
+      console.log(error);
+      toast.error("failed to log out");
+    }
+  };
   return (
     <header className="bg-white dark:bg-[rgb(36,37,38)] text-foreground shadow-md h-16 fixed top-0 left-0 right-0 z-50">
       <div className="mx-auto flex justify-between items-center p-2 cursor-pointer">
         {/* Logo and Search */}
         <div className="flex items-center gap-2 md:gap-4">
-          <Image src="/images/sss.png" alt="app Logo" width={50} height={50}
-          onClick={()=>handleNavigation('/')} 
+          <Image
+            src="/images/sss.png"
+            alt="app Logo"
+            width={50}
+            height={50}
+            onClick={() => handleNavigation("/")}
           />
           <div className="relative">
             <form>
@@ -110,7 +129,9 @@ const Header = () => {
             variant="ghost"
             size="icon"
             className="hidden md:block text-gray-600 dark:text-gray-600 cursor-pointer pl-1"
-          ><Bell/></Button>
+          >
+            <Bell />
+          </Button>
           <Button
             variant="ghost"
             size="icon"
@@ -127,50 +148,66 @@ const Header = () => {
               >
                 <Avatar>
                   <AvatarImage />
-                  <AvatarFallback className="dark:bg-gray-400">RJ</AvatarFallback>
+                  <AvatarFallback className="dark:bg-gray-400">
+                    RJ
+                  </AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-64 z-50"align="end">
+            <DropdownMenuContent className="w-64 z-50" align="end">
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
                   <div children="flex items-center">
                     <Avatar className="h-8 w-8 mr-2">
                       <AvatarImage />
-                      <AvatarFallback className="dark:bg-gray-400">RJ</AvatarFallback>
+                      <AvatarFallback className="dark:bg-gray-400">
+                        RJ
+                      </AvatarFallback>
                     </Avatar>
                     <div className="">
-                      <p className="text-sm font-medium leading-none">Shambhuraj Gadhave</p>
-                             <p className="text-xs mt-2 text-gray-600 leading-none">shambhuraj@007</p>
-                      </div>
+                      <p className="text-sm font-medium leading-none">
+                        Shambhuraj Gadhave
+                      </p>
+                      <p className="text-xs mt-2 text-gray-600 leading-none">
+                        shambhuraj@007
+                      </p>
                     </div>
                   </div>
+                </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-          <DropdownMenuItem className={`cursor-pointer`}onClick={()=>handleNavigation('/user-profile')}>
-            <Users/> <span className="ml-2">Profile</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <MessageCircle/> <span className="ml-2">Messages</span>
-          </DropdownMenuItem>
-           <DropdownMenuSeparator />
-           <DropdownMenuItem onClick={() => setTheme(theme === "light" ? "dark" : "light")    }>
-            {theme === "light" ? (
-              <>
-              <Moon className="ml-2" />
-              <span>dark mode</span>
-              </>): (
-              <>
-              <Sun className="ml-2" />
-              <span>light mode</span>
-              </>
-            )}
-
-            </DropdownMenuItem>
-          <DropdownMenuItem>
-            <LogOut/> <span className="ml-2">Logout</span>
-          </DropdownMenuItem>
-          </DropdownMenuContent>
+              <DropdownMenuItem
+                className={`cursor-pointer`}
+                onClick={() => handleNavigation("/user-profile")}
+              >
+                <Users /> <span className="ml-2">Profile</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <MessageCircle /> <span className="ml-2">Messages</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+              >
+                {theme === "light" ? (
+                  <>
+                    <Moon className="ml-2" />
+                    <span>dark mode</span>
+                  </>
+                ) : (
+                  <>
+                    <Sun className="ml-2" />
+                    <span>light mode</span>
+                  </>
+                )}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className={`cursor-pointer`}
+                onClick={handleLogout}
+              >
+                <LogOut /> <span className="ml-2">Logout</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>

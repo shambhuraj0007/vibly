@@ -1,7 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
-import Header from "./components/header";
+import AuthWrapper from "./auth-wrapper";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,13 +25,15 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Toaster/>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
           enableSystem={true}
         >
-          <Header />
+         <AuthWrapper>
           {children}
+          </AuthWrapper>
         </ThemeProvider>
       </body>
     </html>
