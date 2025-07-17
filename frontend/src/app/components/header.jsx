@@ -29,7 +29,7 @@ import {
 import useSidebarStore from "@/store/sidebarStore";
 import { useRouter } from "next/navigation";
 import userStore from "@/store/userStore";
-import { logout } from "@/service/auth.service";// Assuming you have a logout function in your auth service
+import { logout } from "@/service/auth.service"; // Assuming you have a logout function in your auth serviceUser
 
 const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -37,6 +37,15 @@ const Header = () => {
   const { toggleSidebar } = useSidebarStore();
   const router = useRouter();
   const { user, clearUser } = userStore();
+
+  const userPlaceholder =
+    typeof user?.username === "string"
+      ? user.username
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .toUpperCase()
+      : "?";
 
   const handleNavigation = (path, item) => {
     router.push(path);
@@ -83,11 +92,17 @@ const Header = () => {
                     <div className="flex items-center space-x-8 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md cursor-pointer">
                       <Search className="text-sm text-gray-400" />
                       <div className="flex items-center gap-2">
-                        <Avatar>
-                          <AvatarImage />
-                          <AvatarFallback>RJ</AvatarFallback>
+                        <Avatar className="h-8 w-8">
+                          {user?.profilePicture ? (
+                            <AvatarImage
+                              src={user?.profilePicture}
+                              alt={user?.username}
+                            />
+                          ) : (
+                            <AvatarFallback>{userPlaceholder}</AvatarFallback>
+                          )}
                         </Avatar>
-                        <span>Shambhuraj Gadhave</span>
+                        <span>{user?.username}</span>
                       </div>
                     </div>
                   </div>
@@ -147,10 +162,14 @@ const Header = () => {
                 className="relative h-8 w-8 rounded-full"
               >
                 <Avatar>
-                  <AvatarImage />
-                  <AvatarFallback className="dark:bg-gray-400">
-                    RJ
-                  </AvatarFallback>
+                  {user?.profilePicture ? (
+                    <AvatarImage
+                      src={user?.profilePicture}
+                      alt={user?.username}
+                    />
+                  ) : (
+                    <AvatarFallback>{userPlaceholder}</AvatarFallback>
+                  )}
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
@@ -158,18 +177,22 @@ const Header = () => {
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
                   <div children="flex items-center">
-                    <Avatar className="h-8 w-8 mr-2">
-                      <AvatarImage />
-                      <AvatarFallback className="dark:bg-gray-400">
-                        RJ
-                      </AvatarFallback>
+                    <Avatar>
+                      {user?.profilePicture ? (
+                        <AvatarImage
+                          src={user?.profilePicture}
+                          alt={user?.username}
+                        />
+                      ) : (
+                        <AvatarFallback>{userPlaceholder}</AvatarFallback>
+                      )}
                     </Avatar>
                     <div className="">
                       <p className="text-sm font-medium leading-none">
-                        Shambhuraj Gadhave
+                        {user?.username}
                       </p>
                       <p className="text-xs mt-2 text-gray-600 leading-none">
-                        shambhuraj@007
+                        {user?.email}
                       </p>
                     </div>
                   </div>
@@ -178,15 +201,17 @@ const Header = () => {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className={`cursor-pointer`}
-                onClick={() => handleNavigation("/user-profile")}
+                onClick={() => handleNavigation(`/user-profile/${user._id}`)}
               >
                 <Users /> <span className="ml-2">Profile</span>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+
+              <DropdownMenuItem className={`cursor-pointer`}>
                 <MessageCircle /> <span className="ml-2">Messages</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
+              className={`cursor-pointer`}
                 onClick={() => setTheme(theme === "light" ? "dark" : "light")}
               >
                 {theme === "light" ? (

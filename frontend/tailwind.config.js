@@ -58,6 +58,8 @@ module.exports = {
   	}
   },
   plugins: [require("tailwindcss-animate")],
+  plugins: [require('tailwind-scrollbar-hide')],
+
 };
 // tailwind.config.js
 // This file is used to configure Tailwind CSS for the project.

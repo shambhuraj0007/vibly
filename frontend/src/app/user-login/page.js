@@ -17,9 +17,13 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from "@/components/ui/button";
 import { LogIn } from "lucide-react";
+import { toast } from "react-hot-toast";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { registerUser, loginUser } from "@/service/auth.service";
 import { useRouter } from "next/navigation";
+
+
+
 
 const Page = () => {
   const router = useRouter();
@@ -57,11 +61,12 @@ const Page = () => {
 
   const onSubmitRegister = async (data) => {
     try {
-      const result = await registerUser();
+      const result = await registerUser(data);
       if(result.status === 'success') {
         router.push('/');
       }
       toast.success("Registration  is successful");
+      console.log(data);
     } catch (error) {
       console.error("Registration failed", error);
       toast.error("Registration failed, user exists");
@@ -78,21 +83,30 @@ const Page = () => {
 
 
   //handle login
-  const onSubmitLogin = async(data) => {
-    try {
-      const result = await loginUser();
-      if(result.status === 'success') {
-        router.push('/');
-      }
-      toast.success("Login successful");
-    } catch (error) {
-      console.error("Login failed", error);
-      toast.error("Login failed, please check your credentials");
-    }finally {
-      setIsLoading(false);
+ const onSubmitLogin = async (data) => {
+  setIsLoading(true); 
+  try {
+    const result = await loginUser(data)
+    if (!result) {
+      toast.error("No response from server");
+      return;
     }
-    
-  };
+
+    if (result.status === 'success') {
+      toast.success("Login successful");
+      console.log(data);
+      router.push('/');
+    } else {
+      toast.error(result.message || "Login failed");
+    }
+  } catch (error) {
+    console.error("Login failed", error);
+    toast.error("Login failed, please check your credentials");
+  } finally {
+    setIsLoading(false);
+  }
+};
+
   const handleGoogleLogin = () => {
       window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google`;
   }

@@ -25,11 +25,12 @@ async(req,accessToken,refreshToken,profile,done) =>{
          }
 
          //if user not found create new one
-         user = await  User.create({
-            username:displayName,
-            email: emails[0]?.value,
-            profilePicture: photos[0]?.value
-         })
+         user = await User.create({
+  username: displayName,
+  email: emails[0]?.value,
+  profilePicture: photos[0]?.value,
+  googleId: profile.id, // ✅ this line is required
+});
          done(null,user)
     } catch (error) {
          done(error)

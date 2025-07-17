@@ -66,7 +66,10 @@ const loginUser = async (req, res) => {
     const accessToken = generateToken(user);
 
     res.cookie('auth_token', accessToken, {
-      httpOnly: true,
+       httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax",
+  maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
     return response(res, 200, 'Login successful', { // ✅ Use status 200 for login

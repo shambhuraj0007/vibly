@@ -58,12 +58,13 @@ const sponsors = [
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
-      className="space-y-4"
+      className="space-y-4 "
     >
-      <Card>
+      <Card className="flex-shrink-0 w-[160px] sm:w-[180px] md:w-[200px] lg:w-[220px] xl:w-[240px]">
+
         <CardHeader>
           <CardTitle className="flex text-lg font-semibold items-center">
-            <TrendingUp className="mr-2 h-5 w-5 text-primary" />
+            <TrendingUp className="mr-2 h-5 w-10 text-primary" />
             our sponsers
           </CardTitle>
         </CardHeader>

@@ -65,6 +65,19 @@ const createStory = async (req, res) => {
   }
 };
 
+const deleteStory = async (req, res) => {
+  try {
+    const story = await Story.findByIdAndDelete(req.params.id);
+    if (!story) {
+      return res.status(404).json({ message: "Story not found" });
+    }
+    res.status(200).json({ message: "Story deleted successfully" });
+  } catch (err) {
+    console.error("Delete error:", err);
+    res.status(500).json({ message: "Failed to delete story", error: err.message });
+  }
+};
+
 //getAllStories
 const getAllStory = async (req, res) => {
   try {
@@ -80,13 +93,19 @@ const getAllStory = async (req, res) => {
 // Function to get all posts
 const getAllPosts = async (req, res) => {
   try {
-    const posts=await Post.find().sort({ createdAt: -1 })
-    .populate('user','_id username profilePicture email')// Fetch all posts sorted by creation date
-    .populate({
-      path: 'comments.user',
-      select: 'username, profilePicture '
+    const userId = req.user.userId;
+    const posts = await Post.find().sort({ createdAt: -1 })
+      .populate('user','_id username profilePicture email')
+      .populate({
+        path: 'comments.user',
+        select: 'username, profilePicture '
+      });
+    const postsWithLiked = posts.map(post => {
+      const postObj = post.toObject();
+      postObj.liked = post.likes.includes(userId);
+      return postObj;
     });
-    return responce(res,201,"All Posts fetched successfully",posts);
+    return responce(res,201,"All Posts fetched successfully",postsWithLiked);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching posts', error });
   }
@@ -110,27 +129,30 @@ const getPostsByUserId = async (req, res) => {
 const likePost = async (req, res) => {
   const { postId } = req.params; // Get post ID from request parameters
   const userId = req.user.userId; //from req.user
-try {
-  const post = await Post.findById(postId);
-  if (!post) {
-    return responce(res,404,"Post not found");
+  try {
+    const post = await Post.findById(postId);
+    if (!post) {
+      return responce(res,404,"Post not found");
+    }
+    const hasLiked = post.likes.includes(userId)
+    if (hasLiked) {
+      post.likes= post.likes.filter(id=> id.toString() !== userId.toString());
+      post.likeCount =Math.max(0, post.likeCount - 1);// Ensure like count doesn't go below 0
+    }
+    else {
+      post.likes.push(userId);
+      post.likeCount+=1;
+    }
+    // Save the likes in updated post
+    const updatedPost = await post.save();
+    return responce(res, 201, hasLiked ? "Post unliked successfully" : "Post liked successfully", {
+      likeCount: updatedPost.likeCount,
+      liked: !hasLiked,
+      postId: updatedPost._id
+    });
+  } catch (error) {
+    return responce(res,500,"internal server error", error.message);
   }
-  const hasLiked = post.likes.includes(userId)
-  if (hasLiked) {
-    post.likes= post.likes.filter(id=> id.toString() !== userId.toString());
-    post.likeCount =Math.max(0, post.likeCount - 1);// Ensure like count doesn't go below 0
-  }
-  else {
-    post.likes.push(userId);
-    post.likeCount+=1;
-  }
-  // Save the liikes in updated post
-  const updatedPost = await post.save();
-  return responce(res,201, hasLiked? "Post liked successfully" : "Post unliked successfully", updatedPost);
-
-} catch (error) {
-  return responce(res,500,"internal server error", error.message);
-}
 }
 //post comments by use
 const addCommentTOPost = async (req, res) => {
@@ -185,5 +207,6 @@ module.exports ={
   addCommentTOPost,
   sharePost,
   createStory,
+  deleteStory,
   getAllStory
 }

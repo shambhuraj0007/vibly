@@ -14,10 +14,18 @@ import {
 import React from "react";
 import useSidebarStore from "@/store/sidebarStore";
 import { useRouter } from 'next/navigation';
+import userStore from "@/store/userStore";
+
 
 const LeftSideBar = () => {
   const {isSidebarOpen,toggleSidebar}=useSidebarStore();
+  const {user,clearUser} =userStore();
   const router = useRouter();
+
+  
+  const userPlaceholder = typeof user?.username === "string"
+  ? user.username.split(" ").map((n) => n[0]).join("").toUpperCase()
+  : "?";
   
     const handleNavigation = (path,item) => {
         router.push(path);
@@ -25,6 +33,8 @@ const LeftSideBar = () => {
             toggleSidebar();
         }
     }
+
+
   
 
   return (
@@ -32,11 +42,16 @@ const LeftSideBar = () => {
       <div className="flex flex-col h-full overflow-y-auto p-4">
         {/* Profile Section */}
         <div className="flex items-center space-x-2 mb-3 cursor-pointer">
-          <Avatar className="h-10 w-10">
-            <AvatarImage />
-            <AvatarFallback>SG</AvatarFallback>
-          </Avatar>
-          <span className="font-semibold">Shambhuraj Gadhave</span>
+          <Avatar>
+                          {user?.profilePicture ? (
+                                     <AvatarImage src={user?.profilePicture} alt={user?.username} />
+                                   ):(
+                             <AvatarFallback >
+                               {userPlaceholder}
+                               </AvatarFallback>
+                              )}           
+                         </Avatar>
+          <span className="font-semibold">{user?.username}</span>
         </div>
 
         {/* Navigation Buttons */}
@@ -47,7 +62,7 @@ const LeftSideBar = () => {
             <Home className="mr-4" /> Home
           </Button>
           <Button variant="ghost" className="w-full justify-start cursor-pointer"
-          onClick={()=>handleNavigation('/friends-list')}>
+          onClick={()=>handleNavigation('/friends-list/')}>
             <Users className="mr-4" /> Friends
           </Button>
           <Button variant="ghost" className="w-full justify-start cursor-pointer"
@@ -55,7 +70,7 @@ const LeftSideBar = () => {
             <Video className="mr-4" /> Video
           </Button>
           <Button variant="ghost" className="w-full justify-start  cursor-pointer"
-          onClick={()=>handleNavigation('/user-profile')}>
+          onClick={()=>handleNavigation(`/user-profile/${user._id}`)}>
             <User className="mr-4" /> Profile
           </Button>
           <Button variant="ghost" className="w-full justify-start cursor-pointer">
@@ -70,11 +85,16 @@ const LeftSideBar = () => {
         <div className="mb-16">
           <Separator className="my-4" />
           <div className="flex items-center space-x-2 mb-2 cursor-pointer">
-            <Avatar className="w-10 h-10">
-              <AvatarImage />
-              <AvatarFallback>SG</AvatarFallback>
-            </Avatar>
-            <span className="text-sm font-semibold">Shambhuraj Gadhave</span>
+            <Avatar>
+                            {user?.profilePicture ? (
+                                       <AvatarImage src={user?.profilePicture} alt={user?.username} />
+                                     ):(
+                               <AvatarFallback >
+                                 {userPlaceholder}
+                                 </AvatarFallback>
+                                )}           
+                           </Avatar>
+            <span className="text-sm font-semibold">{user?.username}</span>
           </div>
           <div className="text-xs text-muted-foreground space-y-1">
             <p>shambhuraj@007</p>

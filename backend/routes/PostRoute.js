@@ -4,7 +4,8 @@ const router = express.Router();
 
 const { authMiddleware } = require('../middlewares/authMiddleware');
 const { multerMiddleware } = require('../config/cloudinary');
-const{ createPost, getAllPosts, getPostsByUserId, likePost, addCommentTOPost, sharePost, createStory, getAllStory } = require('../controllers/PostController');
+const{ createPost, getAllPosts,deleteStory, getPostsByUserId, likePost, addCommentTOPost, sharePost, createStory, getAllStory } = require('../controllers/PostController');
+
 
 console.log({ authMiddleware, multerMiddleware, createPost }); 
 // Route to create a new post
@@ -24,6 +25,11 @@ router.post('/posts/comments/:postId', authMiddleware, addCommentTOPost);
 router.post('/story', authMiddleware, multerMiddleware.single('media'), createStory);
 // Route to get all stories
 router.get('/story', authMiddleware, getAllStory);
+// Example: routes/storyRoutes.js
+
+router.delete("/:id", deleteStory);
+
+
 
 module.exports = router;
 

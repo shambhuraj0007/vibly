@@ -1,5 +1,6 @@
 import axiosInstance from "./url.service"
 
+
 //signUp user
 export const registerUser = async(userData)=>{
     try {
@@ -11,14 +12,18 @@ export const registerUser = async(userData)=>{
 }
 
 //login user
-export const loginUser = async(userData)=>{
-    try {
-        const response= await axiosInstance.post('/auth/login',userData);
-            return response.data
-    } catch (error) {
-         console.log(error)
-    }
-}
+export const loginUser = async (userData) => {
+  try {
+    const response = await axiosInstance.post('/auth/login', userData);
+    return response.data;
+  } catch (error) {
+    return {
+      status: 'error',
+      message: error.response?.data?.message || 'Login failed',
+    };
+  }
+};
+
 
 
 //login user
