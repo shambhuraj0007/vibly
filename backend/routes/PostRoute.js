@@ -9,27 +9,23 @@ const{ createPost, getAllPosts,deleteStory, getPostsByUserId, likePost, addComme
 
 console.log({ authMiddleware, multerMiddleware, createPost }); 
 // Route to create a new post
-router.post('/posts', authMiddleware, multerMiddleware.single('media'), createPost);
+router.post('/', authMiddleware, multerMiddleware.single('media'), createPost);
 // Route to get all posts
-router.get('/posts', authMiddleware, getAllPosts);
+router.get('/', authMiddleware, getAllPosts);
 // Route to get posts by user ID
-router.get('/posts/user/:userId', authMiddleware, getPostsByUserId);
-module.exports = router;
+router.get('/user/:userId', authMiddleware, getPostsByUserId);
 //user like post route
-router.get('/posts/likes/:postId', authMiddleware, likePost);
+router.get('/likes/:postId', authMiddleware, likePost);
 //user share post route
-router.get('/posts/share/:postId', authMiddleware, sharePost);
+router.get('/share/:postId', authMiddleware, sharePost);
 // user comment on post route
-router.post('/posts/comments/:postId', authMiddleware, addCommentTOPost);
+router.post('/comments/:postId', authMiddleware, addCommentTOPost);
 // Route to create a new story
 router.post('/story', authMiddleware, multerMiddleware.single('media'), createStory);
 // Route to get all stories
 router.get('/story', authMiddleware, getAllStory);
-// Example: routes/storyRoutes.js
-
+// Delete story route
 router.delete("/:id", deleteStory);
-
-
 
 module.exports = router;
 

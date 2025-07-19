@@ -29,11 +29,11 @@ const followUser =  async(req,res) =>{
         currentUser.following.push(userIdToFollow);
 
         //add current user id to the user to follow ke follower vale list mein 
-        userToFollow.followers.push(currentUser)
+        userToFollow.followers.push(userId)
 
         //update the follower and following count
-        currentUser.followingCount +=1;
-        userToFollow.followerCount +=1;
+        currentUser.followingCount = currentUser.following.length;
+        userToFollow.followerCount = userToFollow.followers.length;
 
         //save the update current user aur user to follow
         await currentUser.save()
@@ -74,11 +74,11 @@ const unfollowUser =  async(req,res) =>{
 
         //remove the user from the following list and update the follower count
         currentUser.following = currentUser.following.filter(id => id.toString() !==userIdToUnFollow)
-        userToUnFollow.followers = userToUnFollow.following.filter(id => id.toString() !==userId)
+        userToUnFollow.followers = userToUnFollow.followers.filter(id => id.toString() !==userId)
 
         //update the follower and following count
-        currentUser.followingCount -=1;
-        userToUnFollow.followerCount -=1;
+        currentUser.followingCount = currentUser.following.length;
+        userToUnFollow.followerCount = userToUnFollow.followers.length;
 
         //save the update current user aur user to follow
         await currentUser.save()
@@ -177,8 +177,8 @@ const getAllUserForRequest = async (req, res) => {
          //find user who  neither followers not following of the login user
           const userForFriendRequest = await User.find({
             _id:{
-                $ne:loggedInUser, //user who follow the logged in user
-                $nin: [...loggedInUser.following, ...loggedInUser.followers]// exclued both
+                $ne:loggedInUserId, //exclude the logged in user
+                $nin: [...loggedInUser.following, ...loggedInUser.followers]// exclude both following and followers
             }
           }).select('username profilePicture email followerCount');
 
@@ -266,7 +266,35 @@ const getUserProfile = async(req, res) =>{
      }
 }
 
+// Get all friends (mutual connections) for the logged-in user
+const getAllFriendsForLoggedInUser = async (req, res) => {
+    try {
+        const loggedInUserId = req.user.userId;
 
+        // Find the logged in user and retrieve their followers and following
+        const loggedInUser = await User.findById(loggedInUserId)
+            .select('followers following')
+            .populate('following', 'username profilePicture email followerCount followingCount')
+            .populate('followers', 'username profilePicture email followerCount followingCount');
+
+        if (!loggedInUser) {
+            return response(res, 404, 'User not found');
+        }
+
+        // Create a set of user IDs that the logged in user is following
+        const followingUserId = new Set(loggedInUser.following.map(user => user._id.toString()));
+
+        // Filter followers to get only those who are also following you back (mutual friends)
+        const mutualFriends = loggedInUser.followers.filter(follower => 
+            followingUserId.has(follower._id.toString())
+        );
+
+        return response(res, 200, 'Friends list retrieved successfully', mutualFriends);
+
+    } catch (error) {
+        return response(res, 500, 'Internal server error', error.message);
+    }
+}
 
 module.exports= {
     followUser,
@@ -277,5 +305,6 @@ module.exports= {
     getAllMutualFriends,
     getAllUser,
     checkUserAuth,
-    getUserProfile
+    getUserProfile,
+    getAllFriendsForLoggedInUser
 }

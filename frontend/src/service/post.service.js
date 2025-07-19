@@ -3,7 +3,7 @@ import axiosInstance from "./url.service";
 // Function to create a new post
 export const createPost = async (postData) => {
   try {
-    const response = await axiosInstance.post("users/posts", postData);
+    const response = await axiosInstance.post("posts", postData);
     return response?.data?.data;
   } catch (error) {
     console.error("Error creating post:", error);
@@ -12,10 +12,10 @@ export const createPost = async (postData) => {
 };
 
 // Function to create a story
-// This function sends a POST request to the 'users/story' endpoint with the provided postData
+// This function sends a POST request to the 'posts/story' endpoint with the provided postData
 export const createStory = async (postData) => {
   try {
-    const response = await axiosInstance.post("users/story", postData);
+    const response = await axiosInstance.post("posts/story", postData);
     return response?.data?.data;
   } catch (error) {
     console.error("Error creating post:", error);
@@ -26,7 +26,7 @@ export const createStory = async (postData) => {
 //get all post method
 export const getAllPosts = async () => {
   try {
-    const result = await axiosInstance.get("/users/posts");
+    const result = await axiosInstance.get("/posts");
     return result?.data?.data;
   } catch (error) {
     console.error(error);
@@ -37,7 +37,7 @@ export const getAllPosts = async () => {
 //get all story method
 export const getAllStory = async () => {
   try {
-    const result = await axiosInstance.get("/users/story");
+    const result = await axiosInstance.get("/posts/story");
     return result?.data?.data;
   } catch (error) {
     console.error(error);
@@ -48,7 +48,7 @@ export const getAllStory = async () => {
 //method for like a post
 export const likePost = async (postId) => {
   try {
-    const response= await axiosInstance.get(`/users/posts/likes/${postId}`);
+    const response= await axiosInstance.get(`/posts/likes/${postId}`);
     return response?.data?.data;
   } catch (error) {
     console.error("Error liking post:", error);
@@ -60,7 +60,7 @@ export const likePost = async (postId) => {
 export const commentsPost = async (postId, comment) => {
   try {
     const result = await axiosInstance.post(
-      `/users/posts/comments/${postId}`,
+      `/posts/comments/${postId}`,
       comment
     );
     return result?.data?.data;
@@ -73,7 +73,7 @@ export const commentsPost = async (postId, comment) => {
 //method for share a post
 export const sharePost = async (postId) => {
   try {
-    const result = await axiosInstance.post(`/users/posts/share/${postId}`);
+    const result = await axiosInstance.post(`/posts/share/${postId}`);
     return result?.data?.data;
   } catch (error) {
     console.error(error);
@@ -84,7 +84,7 @@ export const sharePost = async (postId) => {
 //get all users posts
 export const getAllUserPosts = async (userId) => {
   try {
-    const result = await axiosInstance.get(`/users/posts/user/${userId}`);
+    const result = await axiosInstance.get(`/posts/user/${userId}`);
     return result?.data?.data;
   } catch (error) {
     console.error(error);

@@ -2,7 +2,8 @@ import axiosInstance from "./url.service";
 
 export const getAllFriendsRequest = async() =>{
     try {
-         const response = await axiosInstance.get('/users/friend-request')
+         const response = await axiosInstance.get('/users/friends-request')
+        console.log(response?.data);
          return response?.data;
     } catch (error) {
         console.log(error);
@@ -24,6 +25,7 @@ export const getAllFriendsSuggestion = async() =>{
 export const followUser = async(userId) =>{
     try {
          const response = await axiosInstance.post('/users/follow', {userIdToFollow:userId})
+         console.log(response?.data);
          return response?.data;
     } catch (error) {
         console.log(error);
@@ -66,9 +68,9 @@ export const fetchUserProfile = async(userId) =>{
 
 
 
-export const getMutualFriends = async() =>{
+export const getMutualFriends = async(userId) =>{
     try {
-         const response = await axiosInstance.get('/users/mutual-friends')
+         const response = await axiosInstance.get(`/users/mutual-friends/${userId}`)
          return response?.data?.data;
     } catch (error) {
         console.log(error);
@@ -76,6 +78,11 @@ export const getMutualFriends = async() =>{
     }
 }
 
+
+export const getAllFriends = async () => {
+  const response = await axiosInstance.get('/users/friends');
+  return response.data;
+};
 
 
 export const updateUserProfile = async(userId,updateData) =>{

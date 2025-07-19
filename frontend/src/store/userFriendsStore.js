@@ -1,4 +1,4 @@
-import { deleteUserFromRequest, followUser, getAllFriendsRequest, getAllFriendsSuggestion, getMutualFriends, UnfollowUser } from "@/service/user.service";
+import { deleteUserFromRequest, followUser, getAllFriendsRequest, getAllFriendsSuggestion, getMutualFriends, UnfollowUser, getAllFriends } from "@/service/user.service";
 import toast from "react-hot-toast";
 import { create } from "zustand";
 
@@ -10,6 +10,7 @@ export const userFriendStore = create((set,get) => ({
     friendRequest:[],
     friendSuggestion:[],
     mutualFriends:[],
+    friends:[],
     loading:false,
 
    fetchFriendRequest: async() =>{
@@ -28,22 +29,33 @@ export const userFriendStore = create((set,get) => ({
     set({loading:true})
     try {
           const friend = await getAllFriendsSuggestion();
-          set({friendSuggestion: friend.data, isLoading:false})
+          set({friendSuggestion: friend.data, loading:false})
     } catch (error) { 
        set({error, loading:false})
     }finally{
       set({loading:false})
     }
    },
-   fetchMutualFriends: async() =>{
+   fetchMutualFriends: async(userId) =>{
     set({loading:true})
     try {
-          const friend = await getMutualFriends();
+          const friend = await getMutualFriends(userId);
           set({mutualFriends: friend, loading:false})
     } catch (error) { 
        set({error, loading:false})
     }finally{
       set({loading:false})
+    }
+   },
+   fetchFriends: async () => {
+    set({ loading: true });
+    try {
+      const friends = await getAllFriends();
+      set({ friends: friends.data, loading: false });
+    } catch (error) {
+      set({ error, loading: false });
+    } finally {
+      set({ loading: false });
     }
    },
    followUser:async(userId) =>{
