@@ -296,6 +296,57 @@ const getAllFriendsForLoggedInUser = async (req, res) => {
     }
 }
 
+// Delete a friend (remove mutual connection)
+const deleteFriend = async (req, res) => {
+    try {
+        const loggedInUserId = req.user.userId;
+        const { friendId } = req.params;
+
+        // Prevent user from deleting themselves
+        if (loggedInUserId === friendId) {
+            return response(res, 400, 'You cannot remove yourself as a friend');
+        }
+
+        const loggedInUser = await User.findById(loggedInUserId);
+        const friendUser = await User.findById(friendId);
+
+        // Check if both users exist
+        if (!loggedInUser || !friendUser) {
+            return response(res, 404, 'User not found');
+        }
+
+        // Check if they are actually friends (mutual connection)
+        const isMutualFriend = loggedInUser.following.includes(friendId) && 
+                              loggedInUser.followers.includes(friendId);
+
+        if (!isMutualFriend) {
+            return response(res, 404, 'This user is not your friend');
+        }
+
+        // Remove mutual connection
+        loggedInUser.following = loggedInUser.following.filter(id => id.toString() !== friendId);
+        loggedInUser.followers = loggedInUser.followers.filter(id => id.toString() !== friendId);
+        
+        friendUser.following = friendUser.following.filter(id => id.toString() !== loggedInUserId);
+        friendUser.followers = friendUser.followers.filter(id => id.toString() !== loggedInUserId);
+
+        // Update counts
+        loggedInUser.followingCount = loggedInUser.following.length;
+        loggedInUser.followerCount = loggedInUser.followers.length;
+        friendUser.followingCount = friendUser.following.length;
+        friendUser.followerCount = friendUser.followers.length;
+
+        // Save both users
+        await loggedInUser.save();
+        await friendUser.save();
+
+        return response(res, 200, 'Friend removed successfully');
+
+    } catch (error) {
+        return response(res, 500, 'Internal server error', error.message);
+    }
+}
+
 module.exports= {
     followUser,
     unfollowUser,
@@ -306,5 +357,6 @@ module.exports= {
     getAllUser,
     checkUserAuth,
     getUserProfile,
-    getAllFriendsForLoggedInUser
+    getAllFriendsForLoggedInUser,
+    deleteFriend
 }

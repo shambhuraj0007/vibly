@@ -6,7 +6,7 @@ import FriendRequest from "./FriendRequest";
 import FriendsSuggestion from "./FriendsSuggestion";
 import { userFriendStore } from "@/store/userFriendsStore";
 import toast from "react-hot-toast";
-
+import { formatDate } from "@/lib/utils";
 
 
 const Page = () => {

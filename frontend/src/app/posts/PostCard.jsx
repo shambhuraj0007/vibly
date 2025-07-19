@@ -33,6 +33,7 @@ import { likePost } from "@/service/post.service";
 import toast from "react-hot-toast";
 
 
+
 const PostCard = ({ post, onComment }) => {
   const { user } = userStore();
   const [liked, setLiked] = useState(post?.liked || false);

@@ -1,4 +1,4 @@
-import { deleteUserFromRequest, followUser, getAllFriendsRequest, getAllFriendsSuggestion, getMutualFriends, UnfollowUser, getAllFriends } from "@/service/user.service";
+import { deleteUserFromRequest, followUser as followUserService, getAllFriendsRequest, getAllFriendsSuggestion, getMutualFriends, UnfollowUser, getAllFriends, deleteFriend } from "@/service/user.service";
 import toast from "react-hot-toast";
 import { create } from "zustand";
 
@@ -61,7 +61,7 @@ export const userFriendStore = create((set,get) => ({
    followUser:async(userId) =>{
     set({loading:true})
     try {
-        await followUser(userId)
+        await followUserService(userId)
     } catch (error) {
       set({error, loading:false})
     }
@@ -81,6 +81,18 @@ export const userFriendStore = create((set,get) => ({
         toast.success("you have deleted friend successfully")
     } catch (error) {
       set({error, loading:false})
+    }
+   },
+   deleteFriend: async(friendId) =>{
+    set({loading:true})
+    try {
+        await deleteFriend(friendId)
+        toast.success("Friend removed successfully")
+    } catch (error) {
+      set({error, loading:false})
+      toast.error("Failed to remove friend")
+    }finally{
+      set({loading:false})
     }
    }
 

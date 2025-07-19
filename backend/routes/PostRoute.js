@@ -17,7 +17,7 @@ router.get('/user/:userId', authMiddleware, getPostsByUserId);
 //user like post route
 router.get('/likes/:postId', authMiddleware, likePost);
 //user share post route
-router.get('/share/:postId', authMiddleware, sharePost);
+router.post('/share/:postId', authMiddleware, sharePost);
 // user comment on post route
 router.post('/comments/:postId', authMiddleware, addCommentTOPost);
 // Route to create a new story

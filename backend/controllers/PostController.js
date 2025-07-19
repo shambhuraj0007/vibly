@@ -16,7 +16,6 @@ const createPost = async (req, res) => {
         console.log("File uploaded to Cloudinary:", uplodeResult);
         mediaUrl = uplodeResult?.secure_url;
         mediaType = file.mimetype.startsWith('video') ? 'video' : 'image';
-
     }
     // Create a new post object
     const newPost=await new Post({
@@ -24,8 +23,8 @@ const createPost = async (req, res) => {
         content: content,
         mediaUrl: mediaUrl,
         mediaType: mediaType,
-        LikeCount: 0,
-        CommentCount: 0,
+        likeCount: 0,
+        commentCount: 0,
         shareCount:0
     })
     await newPost.save();
@@ -115,6 +114,7 @@ const getPostsByUserId = async (req, res) => {
   try {
     if(!userId) return res.status(400).json({ message: 'User ID is required to get post' });
     const posts=await Post.find({ user: userId }).sort({ createdAt: -1 })
+    .populate('user','_id username profilePicture email')
     .populate({
       path: 'comments.user',
       select: 'username, profilePicture '

@@ -28,7 +28,7 @@ app.use(passport.initialize());
 
 // ✅ API Routes
 app.use('/auth', authRoute);
-app.use('/users', postRoute);
+app.use('/posts', postRoute);
 app.use('/users', userRoute);
 app.use('/api/stories', postRoute); // ✅ Now your delete endpoint will work
 

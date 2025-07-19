@@ -84,6 +84,16 @@ export const getAllFriends = async () => {
   return response.data;
 };
 
+export const deleteFriend = async (friendId) => {
+  try {
+    const response = await axiosInstance.delete(`/users/friends/${friendId}`);
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 
 export const updateUserProfile = async(userId,updateData) =>{
     try {

@@ -11,7 +11,8 @@ const {followUser,
     getAllUser,
     checkUserAuth,
     getUserProfile,
-    getAllFriendsForLoggedInUser} = require('../controllers/userController');
+    getAllFriendsForLoggedInUser,
+    deleteFriend} = require('../controllers/userController');
     
 //user routes
 const { createOrUpdateUserBio,
@@ -35,6 +36,8 @@ router.get('/user-to-request', authMiddleware, getAllUserForRequest);
 router.get('/mutual-friends/:userId', authMiddleware, getAllMutualFriends);
 //get all friends for logged-in user
 router.get('/friends', authMiddleware, getAllFriendsForLoggedInUser);
+//delete friend
+router.delete('/friends/:friendId', authMiddleware, deleteFriend);
 //get all users from search
 router.get('/', authMiddleware, getAllUser);
 //check user authentication
