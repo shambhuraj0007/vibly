@@ -80,7 +80,7 @@ const StoryCard = ({ isAddStory, story }) => {
 
 
   return (
-    <>
+    <div>
       <Card
         className="w-40 h-60 relative overflow-hidden group cursor-pointer rounded-xl"
         onClick={isAddStory ? undefined : handleStoryClick}
@@ -163,12 +163,10 @@ const StoryCard = ({ isAddStory, story }) => {
         avatar = {isNewStory ? user?.profilePicture : story?.user?.profilePicture}
         isLoading={loading}
         storyId={story?._id}
-      
+             
       />
-     )}
-
-      
-    </>
+     )}     
+    </div>
   );
 };
 

@@ -48,18 +48,17 @@ const HomePage = () => {
 
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-primary/10 via-secondary/10 to-background text-foreground">
       <main className="flex flex-1 pt-16">
         <LeftSideBar />
-        <div className="flex-1 px-4 py-6 md:ml-64 lg:mr-64 lg:max-w-2xl xl:max-w-3xl mx-auto">
-          <div className="lg:ml-2 xl:ml-28">
+        <div className="flex-1 px-4 py-10 md:ml-64 lg:mr-64 lg:max-w-2xl xl:max-w-3xl mx-auto">
+          <div className="lg:ml-2 xl:ml-28 bg-white/80 dark:bg-[#232946cc] backdrop-blur-xl rounded-2xl shadow-2xl p-6">
             <StorySection />
             <NewPostForm
-            
               isPostFormOpen={isPostFormOpen}
               setIsPostFormOpen={setIsPostFormOpen}
             />
-            <div className="mt-6 space-y-6 mb-4">
+            <div className="mt-8 space-y-8 mb-4">
               {posts.map((post) => (
                 <PostCard key={post._id} 
                   post={post}
@@ -78,7 +77,6 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-
         <div className="hidden lg:block lg:w-64 xl:w-80 fixed right-0 top-16 bottom-0 overflow-y-auto p-4">
           <RightSideBar />
         </div>

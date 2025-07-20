@@ -18,6 +18,7 @@ import MutualFriends from "./profileContent/MutualFriends";
 import EditBio from "./profileContent/EditBio";
 import { usePostStore } from "@/store/usePostStore";
 import { formatDateInDDMMYYY } from "@/lib/utils";
+import { toast } from "react-hot-toast";
 
 const ProfileDetails = ({
   activeTab,
@@ -48,6 +49,13 @@ const ProfileDetails = ({
       setLikePosts(new Set(JSON.parse(saveLikes)));
     }
   }, []);
+  const fetchPost = async () => {
+    try {
+      await fetchUserPost(id);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleLike = async (postId) => {
     const updatedLikePost = new Set(likePosts);
@@ -72,7 +80,6 @@ const ProfileDetails = ({
       toast.error("failed to like or unlike the post");
     }
   };
-
 
   const tabContent = {
     posts: (
@@ -119,11 +126,11 @@ const ProfileDetails = ({
                 </div>
                 <div className="flex items-center">
                   <Briefcase className="w-5 h-5 mr-2" />
-                  <span>       {profileData?.bio?.workplace}</span>
+                  <span> {profileData?.bio?.workplace}</span>
                 </div>
                 <div className="flex items-center">
                   <GraduationCap className="w-5 h-5 mr-2" />
-                  <span>       {profileData?.bio?.education}</span>
+                  <span> {profileData?.bio?.education}</span>
                 </div>
               </div>
               <div className="flex items-center mb-4 dark:text-gray-300">
@@ -153,7 +160,7 @@ const ProfileDetails = ({
         <Card>
           <CardContent className="p-6">
             <h2 className="text-xl font-semibold mb-4 dark:text-gray-300">
-              About{" "} {profileData?.username}
+              About {profileData?.username}
             </h2>
             <div className="space-y-4 dark:text-gray-300">
               <div className="flex items-center">
@@ -162,7 +169,7 @@ const ProfileDetails = ({
               </div>
               <div className="flex items-center">
                 <GraduationCap className="w-5 h-5 mr-2" />
-                <span>    {profileData?.bio?.education}</span>
+                <span> {profileData?.bio?.education}</span>
               </div>
               <div className="flex items-center">
                 <Home className="w-5 h-5 mr-2" />
@@ -186,7 +193,9 @@ const ProfileDetails = ({
               </div>
               <div className="flex items-center">
                 <Cake className="w-5 h-5 mr-2" />
-                <span>Birthday: {formatDateInDDMMYYY( profileData?.dateOfBirth)}</span>
+                <span>
+                  Birthday: {formatDateInDDMMYYY(profileData?.dateOfBirth)}
+                </span>
               </div>
             </div>
           </CardContent>

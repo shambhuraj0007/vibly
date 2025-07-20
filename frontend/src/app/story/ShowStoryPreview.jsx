@@ -36,7 +36,7 @@ const ShowStoryPreview = ({
   }, [storyId, onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 w-full h-full">
+    <div className="fixed inset-0 z-50  bg-black/60 w-full h-full flex justify-center">
       <div className="relative w-full max-w-md h-[80vh] flex flex-col bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg">
         
         {/* Close Button */}

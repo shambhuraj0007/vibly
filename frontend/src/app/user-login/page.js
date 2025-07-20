@@ -120,7 +120,7 @@ const Page = () => {
         <Card className="w-full max-w-6xl dark:text-white p-6">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-center text-red-400 to-10%">꧁𓊈𒆜<b className="text-4xl text-blue-400">🆅</b>🅸🅱🅻🆈𒆜𓊉<i className="text-white text-sm">by Shambhuraj</i></CardTitle>
-            <CardDescription className="text-center">
+            <CardDescription className="text-center text-black">
               Connect with friends and vibe with the world with vibly
             </CardDescription>
           </CardHeader>
