@@ -8,6 +8,7 @@ import Header from "./components/Header";
 
 
 
+
 export default function AuthWrapper ({children}){
     const {setUser,clearUser} = userStore();
     const router = useRouter()
