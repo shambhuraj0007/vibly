@@ -20,11 +20,23 @@ const corsOptions = {
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   allowedHeaders: "Content-Type,Authorization",
 };
-app.use(cors({
-  origin: "https://vibly-iota.vercel.app/", // Replace with your Vercel frontend URL
-  credentials: true
-}));
+const allowedOrigins = [
+  "https://vibly-iota.vercel.app",
+  "http://localhost:3000"
+];
 
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ""))) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 // Connect to DB
 connectDb();
 app.use(passport.initialize());
