@@ -17,7 +17,7 @@ import { motion } from "framer-motion";
 import MutualFriends from "./profileContent/MutualFriends";
 import EditBio from "./profileContent/EditBio";
 import { usePostStore } from "@/store/usePostStore";
-import { formatDateInDDMMYYY } from "@/lib/utils";
+import { formatDateInDDMMYYY } from "@/lib/Utils";
 import { toast } from "react-hot-toast";
 
 const ProfileDetails = ({

@@ -28,11 +28,9 @@ import {
 } from "lucide-react";
 import PostComments from "./PostComments";
 import userStore from "@/store/userStore";
-import { formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/Utils";
 import { likePost } from "@/service/post.service";
 import toast from "react-hot-toast";
-
-
 
 const PostCard = ({ post, onComment }) => {
   const { user } = userStore();
@@ -128,7 +126,10 @@ const PostCard = ({ post, onComment }) => {
             <div className="flex items-center gap-3 cursor-pointer">
               <Avatar className="h-8 w-8">
                 {post?.user?.profilePicture ? (
-                  <AvatarImage src={post.user.profilePicture} alt={post.user.username} />
+                  <AvatarImage
+                    src={post.user.profilePicture}
+                    alt={post.user.username}
+                  />
                 ) : (
                   <AvatarFallback>{userPostPlaceholder}</AvatarFallback>
                 )}
@@ -148,7 +149,11 @@ const PostCard = ({ post, onComment }) => {
           <p className="mb-4">{post?.content}</p>
 
           {post?.mediaUrl && post.mediaType === "image" && (
-            <img src={post.mediaUrl} alt="post" className="w-full h-auto rounded-lg mb-4" />
+            <img
+              src={post.mediaUrl}
+              alt="post"
+              className="w-full h-auto rounded-lg mb-4"
+            />
           )}
           {post?.mediaUrl && post.mediaType === "video" && (
             <video controls className="w-full h-[500px] rounded-lg mb-4">
@@ -157,7 +162,9 @@ const PostCard = ({ post, onComment }) => {
           )}
 
           <div className="flex justify-between items-center mb-4 text-sm text-muted-foreground">
-            <span>{likeCount} {likeCount === 1 ? "like" : "likes"}</span>
+            <span>
+              {likeCount} {likeCount === 1 ? "like" : "likes"}
+            </span>
             <div className="flex gap-3">
               <span
                 onClick={() => setShowComments((prev) => !prev)}
@@ -174,7 +181,9 @@ const PostCard = ({ post, onComment }) => {
           <div className="flex justify-between mb-2">
             <Button
               variant="ghost"
-              className={`flex items-center gap-2 dark:hover:bg-gray-700 ${liked ? "text-red-600" : ""}`}
+              className={`flex items-center gap-2 dark:hover:bg-gray-700 ${
+                liked ? "text-red-600" : ""
+              }`}
               onClick={handleLikeClick}
             >
               <ThumbsUp className="h-4 w-4" /> Like
@@ -182,7 +191,9 @@ const PostCard = ({ post, onComment }) => {
 
             <Button
               variant="ghost"
-              className={`flex items-center gap-2 dark:hover:bg-gray-700 ${disliked ? "text-blue-600" : ""}`}
+              className={`flex items-center gap-2 dark:hover:bg-gray-700 ${
+                disliked ? "text-blue-600" : ""
+              }`}
               onClick={handleDislikeClick}
             >
               <ThumbsDown className="h-4 w-4" /> Dislike
@@ -196,9 +207,15 @@ const PostCard = ({ post, onComment }) => {
               <MessageCircleHeart className="h-4 w-4" /> Comment
             </Button>
 
-            <Dialog open={isShareDialogOpen} onOpenChange={setIsShareDialogOpen}>
+            <Dialog
+              open={isShareDialogOpen}
+              onOpenChange={setIsShareDialogOpen}
+            >
               <DialogTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-2 dark:hover:bg-gray-700">
+                <Button
+                  variant="ghost"
+                  className="flex items-center gap-2 dark:hover:bg-gray-700"
+                >
                   <Share2 className="h-4 w-4" /> Share
                 </Button>
               </DialogTrigger>
@@ -208,19 +225,39 @@ const PostCard = ({ post, onComment }) => {
                   <DialogDescription>Select a platform:</DialogDescription>
                 </DialogHeader>
                 <div className="flex flex-col gap-3 p-4 bg-muted/40 rounded-lg">
-                  <Button onClick={() => handleShare("facebook")} variant="ghost" className="gap-2">
+                  <Button
+                    onClick={() => handleShare("facebook")}
+                    variant="ghost"
+                    className="gap-2"
+                  >
                     <Facebook className="h-5 w-5 text-blue-600" /> Facebook
                   </Button>
-                  <Button onClick={() => handleShare("twitter")} variant="ghost" className="gap-2">
+                  <Button
+                    onClick={() => handleShare("twitter")}
+                    variant="ghost"
+                    className="gap-2"
+                  >
                     <Twitter className="h-5 w-5 text-sky-500" /> Twitter
                   </Button>
-                  <Button onClick={() => handleShare("instagram")} variant="ghost" className="gap-2">
+                  <Button
+                    onClick={() => handleShare("instagram")}
+                    variant="ghost"
+                    className="gap-2"
+                  >
                     <Instagram className="h-5 w-5 text-pink-500" /> Instagram
                   </Button>
-                  <Button onClick={() => handleShare("linkedin")} variant="ghost" className="gap-2">
+                  <Button
+                    onClick={() => handleShare("linkedin")}
+                    variant="ghost"
+                    className="gap-2"
+                  >
                     <Linkedin className="h-5 w-5 text-blue-800" /> LinkedIn
                   </Button>
-                  <Button onClick={() => handleShare("copy")} variant="ghost" className="gap-2">
+                  <Button
+                    onClick={() => handleShare("copy")}
+                    variant="ghost"
+                    className="gap-2"
+                  >
                     <Copy className="h-5 w-5" /> Copy Link
                   </Button>
                 </div>
@@ -238,8 +275,11 @@ const PostCard = ({ post, onComment }) => {
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <PostComments post={post} commentInputRef={commentInputRef} onComment={onComment} />
-
+                <PostComments
+                  post={post}
+                  commentInputRef={commentInputRef}
+                  onComment={onComment}
+                />
               </motion.div>
             )}
           </AnimatePresence>

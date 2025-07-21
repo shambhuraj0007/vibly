@@ -14,7 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import PostComments from "@/app/posts/PostComments";
-import { formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/Utils";
 
 const PostsContent = ({ post, isLiked, onShare, onComment, onLike }) => {
   const [showComments, setShowComments] = useState(false);

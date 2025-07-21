@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import userStore from "@/store/userStore";
 import { Input } from "@/components/ui/input";
-import { formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/Utils";
 
 const PostComments = ({ post, onComment, commentInputRef }) => {
   const [showAllComments, setShowAllComments] = useState(false);
@@ -86,19 +86,24 @@ const PostComments = ({ post, onComment, commentInputRef }) => {
           {user?.profilePicture ? (
             <AvatarImage src={user?.profilePicture} alt={user?.username} />
           ) : (
-            <AvatarFallback className="dark:bg-gray-400">{userPlaceholder}</AvatarFallback>
+            <AvatarFallback className="dark:bg-gray-400">
+              {userPlaceholder}
+            </AvatarFallback>
           )}
         </Avatar>
         <Input
-        value= {commentText}
-        ref={commentInputRef}
-        onChange={(e) => setCommentText(e.target.value)}
-        onKeyDown= {(e) => e.key === 'Enter' && handleCommentSubmit()}
+          value={commentText}
+          ref={commentInputRef}
+          onChange={(e) => setCommentText(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleCommentSubmit()}
           placeholder="Write a comment..."
           className="flex-grow cursor-pointer rounded-full h-12 dark:bg-[rgb(58,59,60)] "
         />
-        <Button variant="ghost" size="icon" className="hover:bg-transparent"
-         onClick={handleCommentSubmit}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="hover:bg-transparent"
+          onClick={handleCommentSubmit}
         >
           <Send className="h-5 w-5 text-blue-500" />
         </Button>
