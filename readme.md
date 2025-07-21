@@ -6,8 +6,8 @@
 
 ## 🌐 Live Demo
 
-🚀 **Frontend**: [https://vibly.vercel.app](https://vibly.vercel.app)  
-🛠️ **Backend**: [https://vibly-backend.onrender.com](https://vibly-backend.onrender.com)
+🚀 **Frontend**:https://vibly-iota.vercel.app/ 
+🛠️ **Backend**: https://vibly-iota.vercel.app/
 
 ---
 
