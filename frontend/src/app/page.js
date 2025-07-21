@@ -1,6 +1,6 @@
 "use client"
 import React from "react";
-import HomePage from "./Homepage/Page";
+import HomePage from "./Homepage/page";
 
 export default function Home() {
   return (

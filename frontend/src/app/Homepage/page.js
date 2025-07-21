@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import LeftSideBar from "../components/LeftSideBar";
 import RightSideBar from "../components/RightSideBar";
-import StorySection from "@/app/story/StorySection";
+import StorySection from "../story/StorySection";
 import NewPostForm from "../posts/NewPostForm";
 import PostCard from "../posts/PostCard";
 import { usePostStore } from "@/store/usePostStore";

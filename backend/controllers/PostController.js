@@ -1,6 +1,6 @@
 const Post = require('../model/Post'); // Assuming you have a Post model
 const { uplodFileTOCloudinary } = require('../config/cloudinary'); // Import the
-const responce=require("../utils/responceHandler")
+const responce = require("../utils/responceHandler")
 const Story = require('../model/story'); // Assuming you have a Story model
 
 
@@ -12,24 +12,24 @@ const createPost = async (req, res) => {
     let mediaUrl = null;
     let mediaType = null;
     if (file) {
-        const uplodeResult= await uplodFileTOCloudinary(file);
-        console.log("File uploaded to Cloudinary:", uplodeResult);
-        mediaUrl = uplodeResult?.secure_url;
-        mediaType = file.mimetype.startsWith('video') ? 'video' : 'image';
+      const uplodeResult = await uplodFileTOCloudinary(file);
+      console.log("File uploaded to Cloudinary:", uplodeResult);
+      mediaUrl = uplodeResult?.secure_url;
+      mediaType = file.mimetype.startsWith('video') ? 'video' : 'image';
     }
     // Create a new post object
-    const newPost=await new Post({
-        user: userId,
-        content: content,
-        mediaUrl: mediaUrl,
-        mediaType: mediaType,
-        likeCount: 0,
-        commentCount: 0,
-        shareCount:0
+    const newPost = await new Post({
+      user: userId,
+      content: content,
+      mediaUrl: mediaUrl,
+      mediaType: mediaType,
+      likeCount: 0,
+      commentCount: 0,
+      shareCount: 0
     })
     await newPost.save();
-    return responce(res,201,"post created sucessfully",newPost);
-    
+    return responce(res, 201, "post created sucessfully", newPost);
+
   } catch (error) {
     res.status(500).json({ message: 'Error creating post', error });
   }
@@ -81,8 +81,8 @@ const deleteStory = async (req, res) => {
 const getAllStory = async (req, res) => {
   try {
     const story = await Story.find().sort({ createdAt: -1 })
-    .populate('user', '_id username profilePicture email'); // Fetch all stories sorted by creation date
-    return responce(res,201,"All Stories fetched successfully",story);
+      .populate('user', '_id username profilePicture email'); // Fetch all stories sorted by creation date
+    return responce(res, 201, "All Stories fetched successfully", story);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching stories', error });
   }
@@ -94,7 +94,7 @@ const getAllPosts = async (req, res) => {
   try {
     const userId = req.user.userId;
     const posts = await Post.find().sort({ createdAt: -1 })
-      .populate('user','_id username profilePicture email')
+      .populate('user', '_id username profilePicture email')
       .populate({
         path: 'comments.user',
         select: 'username, profilePicture '
@@ -104,22 +104,22 @@ const getAllPosts = async (req, res) => {
       postObj.liked = post.likes.includes(userId);
       return postObj;
     });
-    return responce(res,201,"All Posts fetched successfully",postsWithLiked);
+    return responce(res, 201, "All Posts fetched successfully", postsWithLiked);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching posts', error });
   }
 }
 const getPostsByUserId = async (req, res) => {
-  const {userId }= req.params; // Get user ID from request parameters
+  const { userId } = req.params; // Get user ID from request parameters
   try {
-    if(!userId) return res.status(400).json({ message: 'User ID is required to get post' });
-    const posts=await Post.find({ user: userId }).sort({ createdAt: -1 })
-    .populate('user','_id username profilePicture email')
-    .populate({
-      path: 'comments.user',
-      select: 'username, profilePicture '
-    })
-    return responce(res,201,"Posts fetched successfully",posts);
+    if (!userId) return res.status(400).json({ message: 'User ID is required to get post' });
+    const posts = await Post.find({ user: userId }).sort({ createdAt: -1 })
+      .populate('user', '_id username profilePicture email')
+      .populate({
+        path: 'comments.user',
+        select: 'username, profilePicture '
+      })
+    return responce(res, 201, "Posts fetched successfully", posts);
   } catch (error) {
     console.error('Error fetching posts by user ID:', error);
     res.status(500).json({ message: 'Error fetching posts', error });
@@ -132,16 +132,16 @@ const likePost = async (req, res) => {
   try {
     const post = await Post.findById(postId);
     if (!post) {
-      return responce(res,404,"Post not found");
+      return responce(res, 404, "Post not found");
     }
     const hasLiked = post.likes.includes(userId)
     if (hasLiked) {
-      post.likes= post.likes.filter(id=> id.toString() !== userId.toString());
-      post.likeCount =Math.max(0, post.likeCount - 1);// Ensure like count doesn't go below 0
+      post.likes = post.likes.filter(id => id.toString() !== userId.toString());
+      post.likeCount = Math.max(0, post.likeCount - 1);// Ensure like count doesn't go below 0
     }
     else {
       post.likes.push(userId);
-      post.likeCount+=1;
+      post.likeCount += 1;
     }
     // Save the likes in updated post
     const updatedPost = await post.save();
@@ -151,7 +151,7 @@ const likePost = async (req, res) => {
       postId: updatedPost._id
     });
   } catch (error) {
-    return responce(res,500,"internal server error", error.message);
+    return responce(res, 500, "internal server error", error.message);
   }
 }
 //post comments by use
@@ -162,7 +162,7 @@ const addCommentTOPost = async (req, res) => {
   try {
     const post = await Post.findById(postId);
     if (!post) {
-      return responce(res,404,"Post not found");
+      return responce(res, 404, "Post not found");
     }
     const comment = {
       user: userId,
@@ -172,7 +172,7 @@ const addCommentTOPost = async (req, res) => {
     post.comments.push(comment);
     post.commentCount += 1;
     await post.save();
-    return responce(res,201,"Comment added successfully", post);
+    return responce(res, 201, "Comment added successfully", post);
   } catch (error) {
     console.error('Error adding comment to post:', error);
     res.status(500).json({ message: 'Error adding comment', error });
@@ -185,21 +185,21 @@ const sharePost = async (req, res) => {
   try {
     const post = await Post.findById(postId);
     if (!post) {
-      return responce(res,404,"Post not found");
+      return responce(res, 404, "Post not found");
     }
-    const hasUserShared= post.share.includes(userId);
+    const hasUserShared = post.share.includes(userId);
     if (!hasUserShared) {
       post.share.push(userId);
     }
-    post.shareCount+=1;
+    post.shareCount += 1;
     await post.save();
-    return responce(res,201,"Post shared successfully", post);
+    return responce(res, 201, "Post shared successfully", post);
   } catch (error) {
     console.error('Error sharing post:', error);
     res.status(500).json({ message: 'Error sharing post', error });
   }
 }
-module.exports ={
+module.exports = {
   createPost,
   getAllPosts,
   getPostsByUserId,

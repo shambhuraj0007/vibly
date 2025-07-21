@@ -6,6 +6,7 @@ import { ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { usePostStore } from "@/store/usePostStore";
 
+
 const StorySection = () => {
   const [scrollPosition, setScrollPosition] = useState(0); // current scroll position
   const [maxScroll, setMaxScroll] = useState(0); // max scrollable distance

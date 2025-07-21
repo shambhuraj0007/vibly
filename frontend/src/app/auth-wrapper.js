@@ -1,5 +1,5 @@
 'use client'
-import Loader from "@/lib/Loader";
+import Loader from "../lib/Loader";
 import { checkUserAuth, logout } from "@/service/auth.service";
 import userStore from "@/store/userStore";
 import { usePathname, useRouter } from "next/navigation";

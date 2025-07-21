@@ -1,7 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
-import AuthWrapper from "./auth-wrapper";
+import AuthWrapper from "./auth-wrapper"
 import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
