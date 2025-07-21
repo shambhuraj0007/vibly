@@ -1,6 +1,8 @@
 import axios from 'axios';
+require("dotenv").config();
 
-const ApiUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+
+const ApiUrl = process.env.NEXT_PUBLIC_BACKEND_URL ;
 
 const axiosInstance = axios.create({
     baseURL: ApiUrl,
