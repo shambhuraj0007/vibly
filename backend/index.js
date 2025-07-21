@@ -20,7 +20,10 @@ const corsOptions = {
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   allowedHeaders: "Content-Type,Authorization",
 };
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: "https://vibly-iota.vercel.app/", // Replace with your Vercel frontend URL
+  credentials: true
+}));
 
 // Connect to DB
 connectDb();
